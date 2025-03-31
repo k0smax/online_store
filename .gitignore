@@ -41,7 +41,7 @@ htmlcov/*
 .tox/
 .nox/
 ../../online_store/.coverage
-.coverage.*
+.coverage
 .cache
 nosetests.xml
 coverage.xml
