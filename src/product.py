@@ -5,6 +5,7 @@ class Product:
     """
     Класс, который описывает товары
     """
+
     name: str  # Наименование продукта
     description: str  # Описание продукта
     price: float  # Цена продукта
@@ -18,7 +19,7 @@ class Product:
 
     @property
     def price(self):
-        """ Геттер для получения значения цены на товар """
+        """Геттер для получения значения цены на товар"""
         return self.__price
 
     @price.setter
@@ -39,7 +40,6 @@ class Product:
                 self.__price = new_price
         else:
             self.__price = new_price
-
 
     @classmethod
     def new_product(cls, info_data: dict, list_products=None) -> Self:
@@ -77,8 +77,9 @@ if __name__ == "__main__":
     # existing_products.append(product1)
     # product2 = Product("Orange", "Orange", 2.0, 5)
     # existing_products.append(product2)
-    # product3 = Product.new_product({"name": "Apple", "description": "Apple", "price": 1.7, "quantity": 20}, existing_products)
-    # # existing_products.append(product3)
+    # product3 = Product.new_product({"name": "Apple", "description": "Apple", "price": 1.7, "quantity": 20},
+    # existing_products)
+    # existing_products.append(product3)
     #
     # for product in existing_products:
     #     print(product.name, product.price, product.quantity)

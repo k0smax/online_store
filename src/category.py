@@ -5,6 +5,7 @@ class Category:
     """
     Класс, который описывает категории товаров
     """
+
     name: str  # Наименование категории
     description: str  # Описание категории
     products: list[Product]  # Список продуктов в данной категорий
@@ -30,7 +31,7 @@ class Category:
 
     @property
     def products(self) -> str:
-        """ Геттер для вывода списка товаров в виде строк """
+        """Геттер для вывода списка товаров в виде строк"""
         list_product = []
         for product in self.__products:
             list_product.append(f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.")
