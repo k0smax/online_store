@@ -1,4 +1,8 @@
+from unittest.mock import patch
+
 import pytest
+
+from src.product import Product
 
 
 @pytest.mark.parametrize(
@@ -9,9 +13,49 @@ import pytest
     ]
 )
 def test_init(product, expected_name, expected_description, expected_price, expected_quantity, request):
-    """ Тест, для проверки корректности инициализации объектов класса Product """
+    """ Тест, для проверки корректности инициализации объектов класса Product и геттера price """
     product = request.getfixturevalue(product)
     assert product.name == expected_name
     assert product.description == expected_description
     assert product.price == expected_price
     assert product.quantity == expected_quantity
+
+
+@pytest.mark.parametrize(
+    "price, cap_out, return_value, finish_price", [
+        (0, "Цена не должна быть нулевая или отрицательная\n", None, 230),
+        (-100, "Цена не должна быть нулевая или отрицательная\n", None, 230),
+        (200, "Вы действительно хотите понизить цену?\n", "y", 200),
+        (200, "Вы действительно хотите понизить цену?\n", "n", 230),
+        (240, "", None, 240),
+    ]
+)
+def test_products_setter_price(product_apple, price, cap_out, return_value, finish_price, capsys):
+    product_1 = product_apple
+    with patch("builtins.input", return_value=return_value):
+        product_1.price = price
+        captured = capsys.readouterr()
+        assert captured.out == cap_out
+        assert product_1.price == finish_price
+
+
+@pytest.mark.parametrize(
+    "name, description, price, quantity, exp_name, exp_price, exp_quantity, product_list", [
+        ("Груша", "Желтая, мягкая", 180, 90, "Груша", 180, 90, []),
+        ("Яблоко", "Желтое, мягкое", 260, 60, "Яблоко", 260, 160,
+         [Product("Яблоко", "Желтое, мягкое", 250, 100)]),
+    ]
+)
+def test_products_new_product(name, description, price, quantity, exp_name, exp_price, exp_quantity, product_list):
+    product_list = product_list
+    product_dict = {
+        "name": name,
+        "description": description,
+        "price": price,
+        "quantity": quantity
+    }
+    product_2 = Product.new_product(product_dict, product_list)
+    assert product_2.name == exp_name
+    assert product_2.description == description
+    assert product_2.price == exp_price
+    assert product_2.quantity == exp_quantity
