@@ -1,3 +1,5 @@
+import pytest
+
 from src.category import Category
 from src.product import Product
 
@@ -31,3 +33,9 @@ def test_category_add_product(product_apple):
     fruits_category.add_product(product_1)
     assert Category.product_count == 6
     assert fruits_category.products == "Яблоко Голландское, 230 руб. Остаток: 100 шт."
+
+
+def test_category_add_product_invalid():
+    category_1 = Category("Электроника", "Смартфоны")
+    with pytest.raises(TypeError):
+        category_1.add_product("Не продукт")

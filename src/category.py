@@ -13,12 +13,15 @@ class Category:
     category_count = 0  # Количество категорий
     product_count = 0  # Количество товаров в целом
 
-    def __init__(self, name, description, products):
+    def __init__(self, name, description, products=None):
         self.name = name
         self.description = description
-        self.__products = products
+        if products:
+            self.__products = products
+            Category.product_count += len(products)
+        else:
+            self.__products = []
         Category.category_count += 1
-        Category.product_count += len(products)
 
     def add_product(self, product: Product) -> None:
         """
@@ -26,6 +29,8 @@ class Category:
         :param product: товар
         :return: None
         """
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только объекты класса Product или его наследников")
         self.__products.append(product)
         Category.product_count += 1
 
