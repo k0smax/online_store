@@ -59,3 +59,11 @@ def test_products_new_product(name, description, price, quantity, exp_name, exp_
     assert product_2.description == description
     assert product_2.price == exp_price
     assert product_2.quantity == exp_quantity
+
+
+def test_product_str(product_apple):
+    assert str(product_apple) == "Яблоко Голландское, 230 руб. Остаток: 100 шт."
+
+
+def test_product_add(product_tomato, product_cucumber):
+    assert product_tomato + product_cucumber == 28748.75

@@ -1,6 +1,6 @@
 import pytest
 
-from src.category import Category
+from src.category import Category, IterCategory
 from src.product import Product
 
 
@@ -39,3 +39,16 @@ def test_category_add_product_invalid():
     category_1 = Category("Электроника", "Смартфоны")
     with pytest.raises(TypeError):
         category_1.add_product("Не продукт")
+
+
+def test_category_str(product_vegetables):
+    assert str(product_vegetables) == "Овощи, количество продуктов: 140 шт."
+
+
+def test_iter_category(product_vegetables):
+    iterator = IterCategory(product_vegetables)
+    assert next(iterator) == "Помидор, 345.99 руб. Остаток: 25 шт."
+    assert next(iterator) == "Огурец, 200.99 руб. Остаток: 100 шт."
+    assert next(iterator) == "Перец, 150.99 руб. Остаток: 15 шт."
+    with pytest.raises(StopIteration):
+        next(iterator)
