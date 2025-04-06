@@ -1,11 +1,12 @@
 import json
 import os
+from typing import Any, Dict
 
 from src.category import Category
 from src.product import Product
 
 
-def reader_json(path_to_file: str) -> dict:
+def reader_json(path_to_file: str) -> Dict[str, Any]:
     """
     Функция подгружает данные из json-файла
     :param path_to_file: относительный путь до файла
@@ -13,7 +14,7 @@ def reader_json(path_to_file: str) -> dict:
     """
     absolut_path = os.path.abspath(path_to_file)
     with open(absolut_path, "r", encoding="utf-8") as file:
-        data = json.load(file)
+        data: Dict[str, Any] = json.load(file)
     return data
 
 
@@ -51,17 +52,17 @@ def create_products_and_category(category_data: dict) -> list:
     return category_list
 
 
-if __name__ == "__main__":
-    data = reader_json("../data/products.json")
-    category_list = create_products_and_category(data)
-    for category in category_list:
-        print(category.name)
-        print(category.description)
-        for product in category.products:
-            print(product.name)
-            print(product.description)
-            print(product.price)
-            print(product.quantity)
-
-    print(Category.category_count)
-    print(Category.product_count)
+# if __name__ == "__main__":
+#     data = reader_json("../data/products.json")
+#     category_list = create_products_and_category(data)
+#     for category in category_list:
+#         print(category.name)
+#         print(category.description)
+#         for product in category.products:
+#             print(product.name)
+#             print(product.description)
+#             print(product.price)
+#             print(product.quantity)
+#
+#     print(Category.category_count)
+#     print(Category.product_count)
