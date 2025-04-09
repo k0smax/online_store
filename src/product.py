@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, Optional
 
 
 class Product:
@@ -8,22 +8,30 @@ class Product:
 
     name: str  # Наименование продукта
     description: str  # Описание продукта
-    price: float  # Цена продукта
+    __price: float  # Цена продукта
     quantity: int  # Количество штук продукта
 
-    def __init__(self, name, description, price, quantity):
+    def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self) -> str:
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: 'Product') -> float:
+        if not isinstance(other, Product):
+            raise TypeError("Можно складывать только продукты класса 'Product'")
+        return round(self.__price * self.quantity + other.__price * other.quantity, 2)
+
     @property
-    def price(self):
+    def price(self) -> float:
         """Геттер для получения значения цены на товар"""
         return self.__price
 
     @price.setter
-    def price(self, new_price: int) -> None:
+    def price(self, new_price: float) -> None:
         """
         Сеттер для изменения цены на товар
         :param new_price: новая цена на товар
@@ -42,7 +50,7 @@ class Product:
             self.__price = new_price
 
     @classmethod
-    def new_product(cls, info_data: dict, list_products=None) -> Self:
+    def new_product(cls, info_data: dict, list_products: Optional[list[Self]]=None) -> Self:
         """
         Класс-метод для добавления нового продукта
         :param info_data: информация по новому продукту, представленная словарем с ключами
@@ -68,18 +76,3 @@ class Product:
                 return product
 
         return cls(name, description, price, quantity)
-
-
-if __name__ == "__main__":
-    pass
-    # existing_products = []
-    # product1 = Product("Apple", "Apple", 1.5, 10)
-    # existing_products.append(product1)
-    # product2 = Product("Orange", "Orange", 2.0, 5)
-    # existing_products.append(product2)
-    # product3 = Product.new_product({"name": "Apple", "description": "Apple", "price": 1.7, "quantity": 20},
-    # existing_products)
-    # existing_products.append(product3)
-    #
-    # for product in existing_products:
-    #     print(product.name, product.price, product.quantity)
