@@ -1,4 +1,4 @@
-from typing import Self, Optional
+from typing import Optional, Self, Any
 
 
 class Product:
@@ -20,10 +20,10 @@ class Product:
     def __str__(self) -> str:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
-    def __add__(self, other: 'Product') -> float:
-        if not isinstance(other, Product):
-            raise TypeError("Можно складывать только продукты класса 'Product'")
-        return round(self.__price * self.quantity + other.__price * other.quantity, 2)
+    def __add__(self, other: Any) -> float:
+        if not isinstance(other, type(self)):
+            raise TypeError("Можно складывать только продукты только одного класса!")
+        return round(self.price * self.quantity + other.__price * other.quantity, 2)
 
     @property
     def price(self) -> float:
@@ -50,7 +50,7 @@ class Product:
             self.__price = new_price
 
     @classmethod
-    def new_product(cls, info_data: dict, list_products: Optional[list[Self]]=None) -> Self:
+    def new_product(cls, info_data: dict, list_products: Optional[list[Self]] = None) -> Self:
         """
         Класс-метод для добавления нового продукта
         :param info_data: информация по новому продукту, представленная словарем с ключами
@@ -76,3 +76,13 @@ class Product:
                 return product
 
         return cls(name, description, price, quantity)
+
+
+# if __name__ == "__main__":
+#     tomato = Product("Помидор", "Красный помидор", 345.99, 25)
+#     cucumber = Product("Огурец", "Огурец тепличный", 200.99, 100)
+#     print(tomato + cucumber)
+#     print(type(tomato))
+#     print(type(cucumber))
+#     print(tomato.__class__)
+#     print(cucumber.__class__)
