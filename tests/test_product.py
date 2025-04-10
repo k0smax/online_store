@@ -31,6 +31,7 @@ def test_init(product, expected_name, expected_description, expected_price, expe
     ]
 )
 def test_products_setter_price(product_apple, price, cap_out, return_value, finish_price, capsys):
+    """Тест для проверки сеттера price"""
     product_1 = product_apple
     with patch("builtins.input", return_value=return_value):
         product_1.price = price
@@ -47,6 +48,7 @@ def test_products_setter_price(product_apple, price, cap_out, return_value, fini
     ]
 )
 def test_products_new_product(name, description, price, quantity, exp_name, exp_price, exp_quantity, product_list):
+    """Тест для проверки класс-метода new_product"""
     product_list = product_list
     product_dict = {
         "name": name,
@@ -62,8 +64,16 @@ def test_products_new_product(name, description, price, quantity, exp_name, exp_
 
 
 def test_product_str(product_apple):
+    """Тест для проверки работоспособности магического метода __str__"""
     assert str(product_apple) == "Яблоко Голландское, 230 руб. Остаток: 100 шт."
 
 
 def test_product_add(product_tomato, product_cucumber):
+    """Тест для проверки работоспособности магического метода __add__"""
     assert product_tomato + product_cucumber == 28748.75
+
+
+def test_product_add_error(iphone_15, shady_lawn):
+    """Тест для проверки исключения при сложении объектов разных классов"""
+    with pytest.raises(TypeError):
+        price = iphone_15 + shady_lawn
