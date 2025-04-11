@@ -21,7 +21,7 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: Any) -> float:
-        if not isinstance(other, type(self)):
+        if not type(self) is type(other):
             raise TypeError("Можно складывать только продукты только одного класса!")
         return round(self.price * self.quantity + other.__price * other.quantity, 2)
 
@@ -61,7 +61,7 @@ class Product:
         name = info_data["name"]
         quantity = info_data["quantity"]
         price = info_data["price"]
-        description = info_data["description"]
+        # description = info_data["description"]
 
         if list_products is None:
             list_products = []
@@ -75,14 +75,14 @@ class Product:
                 product.price = max(product.price, price)
                 return product
 
-        return cls(name, description, price, quantity)
+        return cls(**info_data)
 
 
-# if __name__ == "__main__":
-#     tomato = Product("Помидор", "Красный помидор", 345.99, 25)
-#     cucumber = Product("Огурец", "Огурец тепличный", 200.99, 100)
-#     print(tomato + cucumber)
-#     print(type(tomato))
-#     print(type(cucumber))
-#     print(tomato.__class__)
-#     print(cucumber.__class__)
+if __name__ == "__main__":
+    tomato = Product("Помидор", "Красный помидор", 345.99, 25)
+    cucumber = Product("Огурец", "Огурец тепличный", 200.99, 100)
+    print(tomato)
+    print(type(tomato))
+    print(type(cucumber))
+    print(tomato.__class__)
+    print(cucumber.__class__)
