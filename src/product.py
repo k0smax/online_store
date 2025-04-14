@@ -1,29 +1,41 @@
-from typing import Optional, Self, Any
+from abc import ABC, abstractmethod
+from typing import Any, Optional, Self
+
+from src.mixin_info_class import MixinInfoClass
 
 
-class Product:
+class BaseProduct(ABC):
     """
-    Класс, который описывает товары
+    Абстрактный базовый класс для товаров.
+    Определяет обязательные атрибуты и методы, которые должны быть реализованы в дочерних классах.
     """
 
     name: str  # Наименование продукта
     description: str  # Описание продукта
-    __price: float  # Цена продукта
+    price: float  # Цена продукта
     quantity: int  # Количество штук продукта
 
+    @abstractmethod
     def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__()
 
     def __str__(self) -> str:
-        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+        """Абстрактный метод для строкового представления продукта"""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: Any) -> float:
+        """Абстрактный метод для сложения продуктов (по стоимости с учетом количества)"""
         if not type(self) is type(other):
             raise TypeError("Можно складывать только продукты только одного класса!")
-        return round(self.price * self.quantity + other.__price * other.quantity, 2)
+        return round(self.price * self.quantity + other.price * other.quantity, 2)
+
+    # def __repr__(self):
+    #     return (f"{self.__class__.__name__}('{self.name}', '{self.description}',"
+    #             f" '{self.price}', '{self.quantity}')")
 
     @property
     def price(self) -> float:
@@ -43,11 +55,57 @@ class Product:
             print("Вы действительно хотите понизить цену?")
             user_input = input("Введите y, если да. Введите n для отмены: ")
             if user_input.lower() != "y":
-                self.__price = self.__price
+                self.__price = self.price
             else:
                 self.__price = new_price
         else:
             self.__price = new_price
+
+    @classmethod
+    @abstractmethod
+    def new_product(cls, info_data: dict, list_products: Optional[list[Self]] = None) -> Self:
+        pass
+
+
+class Product(BaseProduct, MixinInfoClass):
+    """
+    Класс, который описывает товары
+    """
+
+    def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
+        super().__init__(name, description, price, quantity)
+
+    # def __str__(self) -> str:
+    #     return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    # def __add__(self, other: Any) -> float:
+    #     if not type(self) is type(other):
+    #         raise TypeError("Можно складывать только продукты только одного класса!")
+    #     return round(self.price * self.quantity + other.price * other.quantity, 2)
+
+    # @property
+    # def price(self) -> float:
+    #     """Геттер для получения значения цены на товар"""
+    #     return self.__price
+    #
+    # @price.setter
+    # def price(self, new_price: float) -> None:
+    #     """
+    #     Сеттер для изменения цены на товар
+    #     :param new_price: новая цена на товар
+    #     :return: None
+    #     """
+    #     if new_price <= 0:
+    #         print("Цена не должна быть нулевая или отрицательная")
+    #     elif new_price < self.__price:
+    #         print("Вы действительно хотите понизить цену?")
+    #         user_input = input("Введите y, если да. Введите n для отмены: ")
+    #         if user_input.lower() != "y":
+    #             self.__price = self.__price
+    #         else:
+    #             self.__price = new_price
+    #     else:
+    #         self.__price = new_price
 
     @classmethod
     def new_product(cls, info_data: dict, list_products: Optional[list[Self]] = None) -> Self:
@@ -81,8 +139,9 @@ class Product:
 if __name__ == "__main__":
     tomato = Product("Помидор", "Красный помидор", 345.99, 25)
     cucumber = Product("Огурец", "Огурец тепличный", 200.99, 100)
-    print(tomato)
-    print(type(tomato))
-    print(type(cucumber))
-    print(tomato.__class__)
-    print(cucumber.__class__)
+    # print(tomato)
+    # print(type(tomato))
+    # print(type(cucumber))
+    # print(tomato.__class__)
+    # print(cucumber.__class__)
+    # print(Product.__mro__)
