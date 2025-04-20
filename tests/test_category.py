@@ -43,6 +43,16 @@ def test_category_add_product_invalid():
         category_1.add_product("Не продукт")
 
 
+def test_category_middle_price(product_vegetables):
+    product_vegetables = product_vegetables
+    assert product_vegetables.middle_price() == 232.66
+
+
+def test_category_middle_price_exception():
+    product_vegetables = Category("Хлебные изделия", "Мучные испеченные изделия", [])
+    assert product_vegetables.middle_price() == 0
+
+
 def test_category_str(product_vegetables):
     assert str(product_vegetables) == "Овощи, количество продуктов: 140 шт."
 
