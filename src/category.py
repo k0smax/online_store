@@ -1,9 +1,23 @@
+from abc import ABC, abstractmethod
 from typing import Optional, Self
 
+from src.exceptions import ZeroQuantity
 from src.product import Product
 
 
-class Category:
+class CategoryOrderContainer(ABC):
+    """ Абстрактный класс для классов Category и Order """
+
+    @abstractmethod
+    def __init__(self) -> None:
+        pass
+
+    @abstractmethod
+    def add_product(self, *args, **kwargs) -> None:
+        pass
+
+
+class Category(CategoryOrderContainer):
     """
     Класс, который описывает категории товаров
     """
@@ -39,8 +53,16 @@ class Category:
         """
         if not isinstance(product, Product):
             raise TypeError("Можно добавлять только объекты класса Product или его наследников")
-        self.__products.append(product)
-        Category.product_count += 1
+        try:
+            if product.quantity <= 0:
+                raise ZeroQuantity
+            self.__products.append(product)
+            Category.product_count += 1
+            print("Товар добавлен!")
+        except ZeroQuantity as exc_info:
+            print(exc_info)
+        finally:
+            print("Обработка добавления товара завершена")
 
     @property
     def products(self) -> str:
@@ -50,6 +72,14 @@ class Category:
             list_product.append(str(product))
 
         return "\n".join(list_product)
+
+    def middle_price(self):
+        """Метод для расчета средней цены товаров в категории"""
+        list_price = [product.price for product in self.__products]
+        try:
+            return round(sum(list_price) / len(list_price), 2)
+        except ZeroDivisionError:
+            return 0
 
 
 class IterCategory:
