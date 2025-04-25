@@ -21,6 +21,13 @@ def test_init(product, expected_name, expected_description, expected_price, expe
     assert product.quantity == expected_quantity
 
 
+def test_init_quantity_empty():
+    """Тест для проверки инициализации продукта с нулевым количеством"""
+    with pytest.raises(ValueError) as exp_info:
+        Product("Киви", "Зеленый фрукт", 154, 0)
+    assert str(exp_info.value) == "Товар с нулевым количеством не может быть добавлен"
+
+
 @pytest.mark.parametrize(
     "price, cap_out, return_value, finish_price", [
         (0, "Цена не должна быть нулевая или отрицательная\n", None, 230),
